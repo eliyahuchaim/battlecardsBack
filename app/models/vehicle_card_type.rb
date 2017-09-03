@@ -1,0 +1,2 @@
+class VehicleCardType < ApplicationRecord
+end

@@ -1,0 +1,2 @@
+class WeaponCardType < ApplicationRecord
+end
