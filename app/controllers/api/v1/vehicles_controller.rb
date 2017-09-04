@@ -1,2 +1,2 @@
-class Api::v1::VehiclesController < ApplicationController
+class Api::V1::VehiclesController < ApplicationController
 end

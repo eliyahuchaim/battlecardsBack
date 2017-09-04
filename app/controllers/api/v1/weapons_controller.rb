@@ -1,4 +1,4 @@
-class Api::v1::WeaponsController < ApplicationController
+class Api::V1::WeaponsController < ApplicationController
 
 
   def index

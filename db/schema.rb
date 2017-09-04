@@ -17,12 +17,15 @@ ActiveRecord::Schema.define(version: 20170830193504) do
 
   create_table "characters", force: :cascade do |t|
     t.integer "user_id"
+    t.string "name"
+    t.string "avatar"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "class_cards", force: :cascade do |t|
     t.integer "user_id"
+    t.integer "character_id"
     t.integer "class_type_id"
     t.integer "kills"
     t.integer "score"

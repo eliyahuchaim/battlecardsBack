@@ -1,6 +1,7 @@
 class ClassCard  < ApplicationRecord
   belongs_to :user
   belongs_to :class_type
+  belongs_to :character, optional: true
 
 
   def self.create_class_cards(user)

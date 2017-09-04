@@ -23,3 +23,15 @@ Fetch.create_class_card_types
 #
 # Fetch.create_player_class_card("Stats/DetailedStats", 2, "itsecgyo")
 # Fetch.create_player_class_card("Stats/DetailedStats", 2, "tanismike")
+
+
+user = User.first
+
+character = Character.create(user_id: user.id, name: "first character", avatar: "hi")
+
+user.weapon_cards[0].update(character_id: character.id)
+user.weapon_cards[1].update(character_id: character.id)
+user.weapon_cards[2].update(character_id: character.id)
+
+user.vehicle_cards[0].update(character_id: character.id)
+user.class_cards[0].update(character_id: character.id)

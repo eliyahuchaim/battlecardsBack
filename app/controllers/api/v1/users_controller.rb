@@ -13,7 +13,7 @@ class Api::V1::UsersController < ApplicationController
       if @user
         render json: {user: @user, weapons: @user.weapon_cards, vehicles: @user.vehicle_cards, classes: @user.class_cards}
       else
-        render json: {status: "account was not created :,,,,( ", code: 400, message: @user.errors.full_messages[0]}
+        render json: {status: "account not created. Repec Wamen or account get not!:,,,,( ", code: 400, message: @user.errors.full_messages[0]}
       end
   end
 
@@ -23,6 +23,8 @@ class Api::V1::UsersController < ApplicationController
 
 
   def show
+    @user = User.find(params[:id])
+      render json: {user: @user, weapons: @user.weapon_cards, vehicles: @user.vehicle_cards, classes: @user.class_cards}  
   end
 
 
