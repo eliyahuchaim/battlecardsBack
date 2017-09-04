@@ -4,14 +4,9 @@ require 'json'
 # require 'pry'
 
 url = URI('https://battlefieldtracker.com/bf1/api/Stats/DetailedStats?platform=2&displayName=itsecgyo')
-# key = 'TRN-Api-Key'
-# token = '8a10249e-4472-4cfd-b802-6c2b1aa5c330'
 
 class Fetch < ApplicationController
 
-  def self.json
-    @@json
-  end
 
   def self.make_fetch(path, platform, bf1_username)
     url = "https://battlefieldtracker.com/bf1/api/#{path}?platform=#{platform}&displayName=#{bf1_username}"
@@ -25,7 +20,7 @@ class Fetch < ApplicationController
     request = Net::HTTP::Get.new(url)
     request[key] = token
     response = http.request(request)
-    @@json = JSON.parse(response.body)
+    JSON.parse(response.body)
 
   end
 
@@ -41,49 +36,56 @@ class Fetch < ApplicationController
      end
    end
 
-  def self.get_player_data(name, path, platform, bf1_username)
-    response = self.make_fetch(path, platform, bf1_username)
-    cleaned_hash = self.flatten_hash(self.json)
 
-    accuracy_ratio = cleaned_hash[:"result.accuracyRatio"]
-    kills = cleaned_hash[:"result.basicStats.kills"]
-    deaths = cleaned_hash[:"result.basicStats.deaths"]
-    spm = cleaned_hash[:"result.basicStats.spm"]
-    kpm = cleaned_hash[:"result.basicStats.kpm"]
-    skill = cleaned_hash[:"result.basicStats.skill"]
-    wins = cleaned_hash[:"result.basicStats.wins"]
-    losses = cleaned_hash[:"result.basicStats.losses"]
-    time_played = cleaned_hash[:"result.basicStats.timePlayed"]
-    award_score = cleaned_hash[:"result.awardScore"]
-    avenged_deaths = cleaned_hash[:"result.avengerKills"]
-    flags_captured = cleaned_hash[:"result.flagsCaptured"]
-    flags_defended = cleaned_hash[:"result.flagsDefended"]
-    head_shots = cleaned_hash[:"result.headShots"]
-    dogtags_taken = cleaned_hash[:"result.dogtagsTaken"]
-    best_class = cleaned_hash[:"result.favoriteClass"]
-    highest_kill_streak = cleaned_hash[:"result.highestKillStreak"]
-    kdr = cleaned_hash[:"result.kdr"]
-    revives = cleaned_hash[:"result.revives"]
-    longest_headshot = cleaned_hash[:"result.longestHeadShot"]
-    heals = cleaned_hash[:"result.heals"]
-    savior_kills = cleaned_hash[:"result.saviorKills"]
-    squad_score = cleaned_hash[:"result.squadScore"]
-    games_played = cleaned_hash[:"result.roundsPlayed"]
-    rank = cleaned_hash[:"result.basicStats.rank"]
-    repairs = cleaned_hash[:"result.repairs"]
-    kill_assists = cleaned_hash[:"result.killAssists"]
-    suppression_assists = cleaned_hash[:"result.suppressionAssist"]
+   def self.create_player_data(path, platform, bf1_username)
+     response = self.make_fetch(path, platform, bf1_username)
+     cleaned_hash = self.flatten_hash(response)
+     cleaned_hash
+   end
 
 
 
-    user = User.create(name: name, username: "elisings", password: "foo", bf1_username: bf1_username, platform: 2, rank: rank, kills: kills, deaths: deaths, spm: spm, kpm: kpm, skill: skill, wins: wins, losses: losses, award_score: award_score, avenged_deaths: avenged_deaths, accuracy_ratio: accuracy_ratio, flags_captured: flags_captured, flags_defended: flags_defended, head_shots: head_shots, dogtags_taken: dogtags_taken, best_class: best_class, highest_kill_streak: highest_kill_streak, kdr: kdr, revives: revives, longest_headshot: longest_headshot, heals: heals, savior_kills: savior_kills, squad_score: squad_score, games_played: games_played, repairs: repairs, kill_assists: kill_assists, suppression_assists: suppression_assists)
-
-  end
+  # def self.get_player_data(name, path, platform, bf1_username)
+  #   response = self.make_fetch(path, platform, bf1_username)
+  #   cleaned_hash = self.flatten_hash(self.json)
+  #
+  #   accuracy_ratio = cleaned_hash[:"result.accuracyRatio"]
+  #   kills = cleaned_hash[:"result.basicStats.kills"]
+  #   deaths = cleaned_hash[:"result.basicStats.deaths"]
+  #   spm = cleaned_hash[:"result.basicStats.spm"]
+  #   kpm = cleaned_hash[:"result.basicStats.kpm"]
+  #   skill = cleaned_hash[:"result.basicStats.skill"]
+  #   wins = cleaned_hash[:"result.basicStats.wins"]
+  #   losses = cleaned_hash[:"result.basicStats.losses"]
+  #   time_played = cleaned_hash[:"result.basicStats.timePlayed"]
+  #   award_score = cleaned_hash[:"result.awardScore"]
+  #   avenged_deaths = cleaned_hash[:"result.avengerKills"]
+  #   flags_captured = cleaned_hash[:"result.flagsCaptured"]
+  #   flags_defended = cleaned_hash[:"result.flagsDefended"]
+  #   head_shots = cleaned_hash[:"result.headShots"]
+  #   dogtags_taken = cleaned_hash[:"result.dogtagsTaken"]
+  #   best_class = cleaned_hash[:"result.favoriteClass"]
+  #   highest_kill_streak = cleaned_hash[:"result.highestKillStreak"]
+  #   kdr = cleaned_hash[:"result.kdr"]
+  #   revives = cleaned_hash[:"result.revives"]
+  #   longest_headshot = cleaned_hash[:"result.longestHeadShot"]
+  #   heals = cleaned_hash[:"result.heals"]
+  #   savior_kills = cleaned_hash[:"result.saviorKills"]
+  #   squad_score = cleaned_hash[:"result.squadScore"]
+  #   games_played = cleaned_hash[:"result.roundsPlayed"]
+  #   rank = cleaned_hash[:"result.basicStats.rank"]
+  #   repairs = cleaned_hash[:"result.repairs"]
+  #   kill_assists = cleaned_hash[:"result.killAssists"]
+  #   suppression_assists = cleaned_hash[:"result.suppressionAssist"]
+  #
+  #
+  #
+  #   user = User.create(name: name, username: "elisings", password: "foo", bf1_username: bf1_username, platform: 2, rank: rank, kills: kills, deaths: deaths, spm: spm, kpm: kpm, skill: skill, wins: wins, losses: losses, award_score: award_score, avenged_deaths: avenged_deaths, accuracy_ratio: accuracy_ratio, flags_captured: flags_captured, flags_defended: flags_defended, head_shots: head_shots, dogtags_taken: dogtags_taken, best_class: best_class, highest_kill_streak: highest_kill_streak, kdr: kdr, revives: revives, longest_headshot: longest_headshot, heals: heals, savior_kills: savior_kills, squad_score: squad_score, games_played: games_played, repairs: repairs, kill_assists: kill_assists, suppression_assists: suppression_assists)
+  #
+  # end
 
 
   def self.create_weapon_type_card(path, platform, bf1_username)
-
-    # url = "https://battlefieldtracker.com/bf1/api/Stats/#{path}?platform=#{platform}&displayName=#{bf1_username}"
 
     weapons_data = self.make_fetch(path, platform, bf1_username)
 
@@ -109,31 +111,31 @@ class Fetch < ApplicationController
     end
   end
 
-  def self.create_player_weapon_card(path, platform, bf1_username)
-
-    user_id = User.find_by(bf1_username: bf1_username).id
-
-    url = "https://battlefieldtracker.com/bf1/api/Stats/#{path}?platform=#{platform}&displayName=#{bf1_username}"
-
-    response = self.make_fetch(path, platform, bf1_username)
-    cleaned_hash = self.flatten_hash(response)
-    cleaned_hash = cleaned_hash["result"]
-
-    cleaned_hash.each do |weapon_hash|
-      weapon_hash["weapons"].each do |weapon|
-        weapon_id = WeaponCardType.find_by(guid: weapon["guid"]).id
-        kills = weapon["stats"]["values"]["kills"]
-        headshots = weapon["stats"]["values"]["headshots"]
-        accuracy = weapon["stats"]["values"]["accuracy"]
-        time_played = weapon["stats"]["values"]["seconds"]
-        hits = weapon["stats"]["values"]["hits"]
-        shots = weapon["stats"]["values"]["shots"]
-        unlocked = weapon["progression"]["unlocked"]
-
-        WeaponCard.create(user_id: user_id, weapon_card_type_id: weapon_id, kills: kills, headshots: headshots, accuracy: accuracy, time_played: time_played, hits: hits, shots: shots, unlocked: unlocked)
-      end
-    end
-  end
+  # def self.create_player_weapon_card(path, platform, bf1_username)
+  #
+  #   user_id = User.find_by(bf1_username: bf1_username).id
+  #
+  #   url = "https://battlefieldtracker.com/bf1/api/Stats/#{path}?platform=#{platform}&displayName=#{bf1_username}"
+  #
+  #   response = self.make_fetch(path, platform, bf1_username)
+  #   cleaned_hash = self.flatten_hash(response)
+  #   cleaned_hash = cleaned_hash["result"]
+  #
+  #   cleaned_hash.each do |weapon_hash|
+  #     weapon_hash["weapons"].each do |weapon|
+  #       weapon_id = WeaponCardType.find_by(guid: weapon["guid"]).id
+  #       kills = weapon["stats"]["values"]["kills"]
+  #       headshots = weapon["stats"]["values"]["headshots"]
+  #       accuracy = weapon["stats"]["values"]["accuracy"]
+  #       time_played = weapon["stats"]["values"]["seconds"]
+  #       hits = weapon["stats"]["values"]["hits"]
+  #       shots = weapon["stats"]["values"]["shots"]
+  #       unlocked = weapon["progression"]["unlocked"]
+  #
+  #       WeaponCard.create(user_id: user_id, weapon_card_type_id: weapon_id, kills: kills, headshots: headshots, accuracy: accuracy, time_played: time_played, hits: hits, shots: shots, unlocked: unlocked)
+  #     end
+  #   end
+  # end
 
   def self.create_vehicle_type_cards(path, platform, bf1_username)
 
@@ -150,24 +152,24 @@ class Fetch < ApplicationController
     end
   end
 
-  def self.create_player_vehicle_cards(path, platform, bf1_username)
-    response = self.make_fetch(path, platform, bf1_username)
-    cleaned_hash = self.flatten_hash(response)
-    user_id = User.find_by(bf1_username: bf1_username).id
-
-      cleaned_hash["result"].each do |main_scope|
-        main_scope["vehicles"].each do |vehicle|
-
-          name = vehicle["name"]
-          vehicle_id = VehicleCardType.find_by(name: name).id
-          kills = vehicle["stats"]["values"]["kills"].round
-          time_played = vehicle["stats"]["values"]["seconds"]
-          amount_of_vehicles_destroyed = vehicle["stats"]["values"]["destroyed"]
-
-          VehicleCard.create(user_id: user_id, vehicle_card_type_id: vehicle_id, kills: kills, time_played: time_played, amount_of_vehicles_destroyed: amount_of_vehicles_destroyed)
-      end
-    end
-  end
+  # def self.create_player_vehicle_cards(path, platform, bf1_username)
+  #   response = self.make_fetch(path, platform, bf1_username)
+  #   cleaned_hash = self.flatten_hash(response)
+  #   user_id = User.find_by(bf1_username: bf1_username).id
+  #
+  #     cleaned_hash["result"].each do |main_scope|
+  #       main_scope["vehicles"].each do |vehicle|
+  #
+  #         name = vehicle["name"]
+  #         vehicle_id = VehicleCardType.find_by(name: name).id
+  #         kills = vehicle["stats"]["values"]["kills"].round
+  #         time_played = vehicle["stats"]["values"]["seconds"]
+  #         amount_of_vehicles_destroyed = vehicle["stats"]["values"]["destroyed"]
+  #
+  #         VehicleCard.create(user_id: user_id, vehicle_card_type_id: vehicle_id, kills: kills, time_played: time_played, amount_of_vehicles_destroyed: amount_of_vehicles_destroyed)
+  #     end
+  #   end
+  # end
 
   def self.create_class_card_types
 
@@ -210,21 +212,21 @@ class Fetch < ApplicationController
   end
 
 
-  def self.create_player_class_card(path, platform, bf1_username)
-    response = self.make_fetch(path, platform, bf1_username)
-    cleaned_hash = self.flatten_hash(response)
-    user_id = User.find_by(bf1_username: bf1_username).id
-
-
-      cleaned_hash[:"result.kitStats"].each do |kit|
-        classType_id = ClassType.find_by(name: kit["name"]).id
-        kills = kit["kills"]
-        score = kit["score"]
-        time_played = kit["secondsAs"]
-
-        ClassCard.create(user_id: user_id, class_type_id: classType_id, kills: kills, score: score, time_played: time_played)
-      end
-  end
+  # def self.create_player_class_card(path, platform, bf1_username)
+  #   response = self.make_fetch(path, platform, bf1_username)
+  #   cleaned_hash = self.flatten_hash(response)
+  #   user_id = User.find_by(bf1_username: bf1_username).id
+  #
+  #
+  #     cleaned_hash[:"result.kitStats"].each do |kit|
+  #       classType_id = ClassType.find_by(name: kit["name"]).id
+  #       kills = kit["kills"]
+  #       score = kit["score"]
+  #       time_played = kit["secondsAs"]
+  #
+  #       ClassCard.create(user_id: user_id, class_type_id: classType_id, kills: kills, score: score, time_played: time_played)
+  #     end
+  # end
 
 
 
