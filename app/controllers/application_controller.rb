@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::API
   include ActionController::HttpAuthentication::Token::ControllerMethods
+  before_action :authorized
 
   def issue_token(payload)
     JWT.encode(payload, "thesupersecretsecret")
@@ -25,7 +26,7 @@ class ApplicationController < ActionController::API
       end
     end
 
-    def authorize
+    def authorized
       render json: {message: "This Area Is Restricted Son", status: 404} unless logged_in?
     end
 

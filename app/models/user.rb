@@ -56,10 +56,35 @@ class User < ApplicationRecord
       VehicleCard.create_vehicle_cards(user)
       ClassCard.create_class_cards(user)
     end
-
     user
-
   end
+
+
+  def self.characters_info(user)
+
+    characters_hash = {characters: []}
+    i = 0
+
+    user.characters.each do |character|
+      temp_hash = {
+        "info" => [character],
+        "weapons" => [],
+        "vehicle_card" => [],
+        "class_card" => []
+      }
+      character.weapon_cards.each do |weapon|
+        i+=1
+        temp_hash["weapons"].push({"card#{i}" => {"data" => weapon, "info" => WeaponCardType.find(weapon.weapon_card_type.id)}})
+      end
+      temp_hash["vehicle_card"].push({"data" => character.vehicle_card, "info" => VehicleCardType.find(character.vehicle_card.vehicle_card_type_id)})
+      temp_hash["class_card"].push({"data" => character.class_card, "info" => ClassType.find(character.class_card.class_type_id)})
+      characters_hash[:"characters"].push(temp_hash)
+      i = 0
+    end
+    characters_hash
+  end
+
+
 
 
 

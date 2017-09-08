@@ -5,9 +5,9 @@ class Character < ApplicationRecord
   has_one :class_card
 
 
-  def self.create_character(character_params)
+  def self.create_character(user_id, character_params)
 
-    user_id = character_params[:user_id]
+    @user_id = user_id
     name = character_params[:name]
     avatar = character_params[:avater]
 
@@ -16,7 +16,7 @@ class Character < ApplicationRecord
     vehicle_card = character_params[:vehicle_card]
     class_card = character_params[:class_card]
 
-    @character = Character.create(user_id: user_id, name: name, avatar: avatar)
+    @character = Character.create(user_id: @user_id, name: name, avatar: avatar)
       if @character
         weapons_arr.each do |weapon|
           weapon = WeaponCard.find(weapon)
@@ -28,14 +28,12 @@ class Character < ApplicationRecord
     @character
   end
 
-  def self.update_character(character, character_params)
-    # byebug
+  def self.update_character(user_id, character, character_params)
     @character = character
-
+    @user_id = user_id
     character_weapons = []
     @character.weapon_cards.each {|card| character_weapons << card.id}
 
-    user_id = character_params[:user_id]
     name = character_params[:name]
     avatar = character_params[:avatar]
 
@@ -44,7 +42,7 @@ class Character < ApplicationRecord
     vehicle_card = character_params[:vehicle_card]
     class_card = character_params[:class_card]
 
-    @character.update(user_id: user_id, name: name, avatar: avatar)
+    @character.update(user_id: @user_id, name: name, avatar: avatar)
 
     character_weapons.each do |weapon|
       if !weapons_arr.include?(weapon)
@@ -70,6 +68,7 @@ class Character < ApplicationRecord
 
 
   def self.validate_weapon_cards
+    # cannot have more than 3 weapon cards, 1 vehicle and class
   end
 
 end

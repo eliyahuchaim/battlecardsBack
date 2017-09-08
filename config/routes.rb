@@ -4,6 +4,10 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :users, :characters
 
+      get '/usersCharacters/:id', to: 'users#users_characters'
+      get '/cardTypes', to: 'card_types#index'
+      post '/login', to: 'sessions#create'
+
       # post '/createCharacter/:id', to: 'characters#create'
       # patch '/editCharacter/:id', to: 'characters#update'
       # delete '/deleteCharacter/:id', to: 'characters#destroy'
