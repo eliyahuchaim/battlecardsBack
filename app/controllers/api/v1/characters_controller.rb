@@ -1,5 +1,5 @@
 class Api::V1::CharactersController < ApplicationController
-  skip_before_action :authorized [:index, :show,]
+  skip_before_action :authorized, only: [:index, :show]
 
 
   def index
@@ -17,6 +17,7 @@ class Api::V1::CharactersController < ApplicationController
   end
 
   def update
+    byebug
     @character = Character.find(params[:id])
     @user_id = current_user.id
     @character_json = Character.update_character(@user_id, @character, character_params)

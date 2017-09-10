@@ -12,9 +12,13 @@ class Api::V1::SessionsController < ApplicationController
     end
   end
 
+  def send_user_id
+    !!logged_in? ? (render json: {user_id: current_user.id}) : (render json: {user_id: ""})
+  end
+
 
   def user_id
-    !!logged_in ? (render json: {user_id: current_user.id}) : (render json: {user_id: ""})
+    !!logged_in? ? (render json: {user_id: current_user.id}) : (render json: {user_id: ""})
   end
 
 

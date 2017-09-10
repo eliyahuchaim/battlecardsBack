@@ -20,8 +20,8 @@ class ApplicationController < ActionController::API
 
     def current_user
       authenticate_or_request_with_http_token do |token, options|
-        decoded_hash = decoded_hash(token)
-        user_id = decoded_hash[0]["user_id"]
+        decoded_token = decode_token(token)
+        user_id = decoded_token[0]["user_id"]
         @current_user ||= User.find(user_id)
       end
     end

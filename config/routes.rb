@@ -7,6 +7,7 @@ Rails.application.routes.draw do
       get '/usersCharacters/:id', to: 'users#users_characters'
       get '/cardTypes', to: 'card_types#index'
       post '/login', to: 'sessions#create'
+      get '/userid', to: 'sessions#user_id'
 
       # post '/createCharacter/:id', to: 'characters#create'
       # patch '/editCharacter/:id', to: 'characters#update'

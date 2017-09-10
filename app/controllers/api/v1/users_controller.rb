@@ -1,5 +1,5 @@
 class Api::V1::UsersController < ApplicationController
-  skip_before_action :authorized [:index, :show, :create, :users_characters,]
+  skip_before_action :authorized, only: [:index, :show, :create, :users_characters]
 
 
   def index
@@ -25,6 +25,8 @@ class Api::V1::UsersController < ApplicationController
 
   def update
   end
+
+
 
 
   def show

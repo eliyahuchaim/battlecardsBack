@@ -1,5 +1,5 @@
 class Api::V1::CardTypesController < ApplicationController
-  skip_before_action :authorized [:index]
+  skip_before_action :authorized, only: [:index]
 
 
   def index
