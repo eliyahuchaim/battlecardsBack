@@ -66,6 +66,16 @@ class Character < ApplicationRecord
     @character
   end
 
+  def self.delete_character(character)
+    # byebug
+    character.weapon_cards.each do |weapon_card|
+      weapon_card.update(character_id: nil)
+    end
+    character.vehicle_card.update(character_id: nil)
+    character.class_card.update(character_id: nil)
+    Character.destroy(character.id)
+  end
+
 
   def self.validate_weapon_cards
     # cannot have more than 3 weapon cards, 1 vehicle and class

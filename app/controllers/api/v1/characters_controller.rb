@@ -17,7 +17,6 @@ class Api::V1::CharactersController < ApplicationController
   end
 
   def update
-    byebug
     @character = Character.find(params[:id])
     @user_id = current_user.id
     @character_json = Character.update_character(@user_id, @character, character_params)
@@ -34,7 +33,13 @@ class Api::V1::CharactersController < ApplicationController
   end
 
   def destroy
-
+    @character = Character.find(params[:id])
+    @character_check = Character.delete_character(@character)
+      if @character_check
+        render json: {message: "Character deleted"}
+      else
+        render json: {status: "soooon, u tryed to delete, but delete not happen, ask urself y!!", code: 400, message: @character_check.errors.full_messages[0]}
+      end
   end
 
 
