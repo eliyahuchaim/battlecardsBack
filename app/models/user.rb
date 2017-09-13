@@ -85,6 +85,14 @@ class User < ApplicationRecord
   end
 
 
+  def self.get_all_usernames
+     sql = 'SELECT bf1_username, id FROM Users'
+     @connection = ActiveRecord::Base.connection
+     result = @connection.exec_query(sql)
+     result.rows.map {|el| {username: el[0], id: el[1]}}
+  end
+
+
 
 
 

@@ -1,5 +1,5 @@
 class Api::V1::UsersController < ApplicationController
-  skip_before_action :authorized, only: [:index, :show, :create, :users_characters]
+  skip_before_action :authorized, only: [:index, :show, :create, :users_characters, :bf1_usernames, :front_end_data]
 
 
   def index
@@ -7,6 +7,21 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def top_ten_users
+  end
+
+  def bf1_usernames
+    @results = User.get_all_usernames
+    render json: {usernames: @results}
+  end
+
+
+  def front_end_data
+    @response_data = Fetch.make_fetch("Stats/DetailedStats", params[:platform], params[:username])
+    if @response_data
+      render json: {userdata: @response_data}
+    else
+      render json: {message: "error"}
+    end
   end
 
 
