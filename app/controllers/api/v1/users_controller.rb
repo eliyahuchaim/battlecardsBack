@@ -1,5 +1,5 @@
 class Api::V1::UsersController < ApplicationController
-  skip_before_action :authorized, only: [:index, :show, :create, :users_characters, :bf1_usernames, :front_end_data]
+  skip_before_action :authorized, only: [:index, :show, :create, :users_characters, :bf1_usernames, :front_end_data, :top_ten_users]
 
 
   def index
@@ -7,6 +7,7 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def top_ten_users
+    render json: User.top_ten_users
   end
 
   def bf1_usernames
@@ -39,6 +40,7 @@ class Api::V1::UsersController < ApplicationController
 
 
   def update
+
   end
 
 

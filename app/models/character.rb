@@ -9,7 +9,7 @@ class Character < ApplicationRecord
 
     @user_id = user_id
     name = character_params[:name]
-    avatar = character_params[:avater]
+    avatar = character_params[:avatar]
 
     weapons_arr = [character_params[:weapon_card1], character_params[:weapon_card2], character_params[:weapon_card3]]
 

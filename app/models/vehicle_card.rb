@@ -23,5 +23,25 @@ class VehicleCard < ApplicationRecord
     end
   end
 
+  def self.update_vehicle(user)
+    response = Fetch.make_fetch("Progression/GetVehicles", user.platform, user.bf1_username)
+    cleaned_hash = Fetch.flatten_hash(response)
+    user_id = user.id
+
+      cleaned_hash["result"].each do |main_scope|
+        main_scope["vehicles"].each do |vehicle|
+
+          name = vehicle["name"]
+          vehicle_id = VehicleCardType.find_by(name: name).id
+          kills = vehicle["stats"]["values"]["kills"].round
+          time_played = vehicle["stats"]["values"]["seconds"]
+          amount_of_vehicles_destroyed = vehicle["stats"]["values"]["destroyed"]
+          @found_vehicle = user.vehicle_cards.find_by(vehicle_card_type_id: vehicle_id)
+
+        @found_vehicle.update(kills: kills, time_played: time_played, amount_of_vehicles_destroyed: amount_of_vehicles_destroyed)
+      end
+    end
+  end
+
 
 end

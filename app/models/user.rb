@@ -59,6 +59,53 @@ class User < ApplicationRecord
     user
   end
 
+  def self.update_user(user_id)
+    # byebug
+    @user = User.find(user_id)
+    battlefield_username = @user.bf1_username
+
+    platform = @user.platform
+    cleaned_hash = Fetch.create_player_data("Stats/DetailedStats", platform, battlefield_username)
+
+    accuracy_ratio = cleaned_hash[:"result.accuracyRatio"]
+    kills = cleaned_hash[:"result.basicStats.kills"]
+    deaths = cleaned_hash[:"result.basicStats.deaths"]
+    spm = cleaned_hash[:"result.basicStats.spm"]
+    kpm = cleaned_hash[:"result.basicStats.kpm"]
+    skill = cleaned_hash[:"result.basicStats.skill"]
+    wins = cleaned_hash[:"result.basicStats.wins"]
+    losses = cleaned_hash[:"result.basicStats.losses"]
+    time_played = cleaned_hash[:"result.basicStats.timePlayed"]
+    award_score = cleaned_hash[:"result.awardScore"]
+    avenged_deaths = cleaned_hash[:"result.avengerKills"]
+    flags_captured = cleaned_hash[:"result.flagsCaptured"]
+    flags_defended = cleaned_hash[:"result.flagsDefended"]
+    head_shots = cleaned_hash[:"result.headShots"]
+    dogtags_taken = cleaned_hash[:"result.dogtagsTaken"]
+    best_class = cleaned_hash[:"result.favoriteClass"]
+    highest_kill_streak = cleaned_hash[:"result.highestKillStreak"]
+    kdr = cleaned_hash[:"result.kdr"]
+    revives = cleaned_hash[:"result.revives"]
+    longest_headshot = cleaned_hash[:"result.longestHeadShot"]
+    heals = cleaned_hash[:"result.heals"]
+    savior_kills = cleaned_hash[:"result.saviorKills"]
+    squad_score = cleaned_hash[:"result.squadScore"]
+    games_played = cleaned_hash[:"result.roundsPlayed"]
+    rank = cleaned_hash[:"result.basicStats.rank"]
+    repairs = cleaned_hash[:"result.repairs"]
+    kill_assists = cleaned_hash[:"result.killAssists"]
+    suppression_assists = cleaned_hash[:"result.suppressionAssist"]
+
+
+    @user.update(rank: rank, kills: kills, deaths: deaths, spm: spm, kpm: kpm, skill: skill, wins: wins, losses: losses, award_score: award_score, avenged_deaths: avenged_deaths, accuracy_ratio: accuracy_ratio, flags_captured: flags_captured, flags_defended: flags_defended, head_shots: head_shots, dogtags_taken: dogtags_taken, best_class: best_class, highest_kill_streak: highest_kill_streak, kdr: kdr, revives: revives, longest_headshot: longest_headshot, heals: heals, savior_kills: savior_kills, squad_score: squad_score, games_played: games_played, repairs: repairs, kill_assists: kill_assists, suppression_assists: suppression_assists)
+
+    WeaponCard.update_weapon(@user)
+    VehicleCard.update_vehicle(@user)
+    ClassCard.update_class(@user)
+
+
+  end
+
 
   def self.characters_info(user)
 
@@ -90,6 +137,18 @@ class User < ApplicationRecord
      @connection = ActiveRecord::Base.connection
      result = @connection.exec_query(sql)
      result.rows.map {|el| {username: el[0], id: el[1]}}
+  end
+
+  def self.top_ten_users
+    sql = '
+    SELECT bf1_username, award_score, squad_score, wins, losses, kills, deaths
+    FROM users
+    ORDER BY award_score DESC
+    LIMIT 10
+    '
+    @connection = ActiveRecord::Base.connection
+    @result = @connection.exec_query(sql)
+    @result.rows.map{ |el| {username: el[0], score: el[1], squad_score: el[2], wins: el[3], losses: el[4], kills: el[5], deaths: el[6]}}
   end
 
 

@@ -10,6 +10,7 @@ Rails.application.routes.draw do
       get '/userid', to: 'sessions#user_id'
       get '/bf1usernames', to: 'users#bf1_usernames'
       get '/frontenduser/:platform/:username', to: 'users#front_end_data'
+      get '/topusers', to: 'users#top_ten_users'
 
       # post '/createCharacter/:id', to: 'characters#create'
       # patch '/editCharacter/:id', to: 'characters#update'
