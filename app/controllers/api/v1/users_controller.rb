@@ -27,7 +27,6 @@ class Api::V1::UsersController < ApplicationController
 
 
   def create
-
     platform = set_platform(params[:user][:platform])
     response_data = Fetch.create_player_data("Stats/DetailedStats", platform, params[:user][:bf1_username])
     @user = User.create_user(user_params, platform, response_data)
@@ -40,7 +39,13 @@ class Api::V1::UsersController < ApplicationController
 
 
   def update
-
+    @id = parmas[:id]
+    if
+      @user = User.update_user(@id)
+      render json: {user: @user, weapons: @user.weapon_cards, vehicles: @user.vehicle_cards, classes: @user.class_cards}
+    else
+      render json: {status: "account not created. Repec Wamen or account get not!:,,,,( ", code: 400, message: @user.errors.full_messages[0]}
+    end
   end
 
 

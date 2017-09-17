@@ -12,6 +12,8 @@ Rails.application.routes.draw do
       get '/frontenduser/:platform/:username', to: 'users#front_end_data'
       get '/topusers', to: 'users#top_ten_users'
 
+
+
       # post '/createCharacter/:id', to: 'characters#create'
       # patch '/editCharacter/:id', to: 'characters#update'
       # delete '/deleteCharacter/:id', to: 'characters#destroy'

@@ -152,6 +152,10 @@ class User < ApplicationRecord
   end
 
 
+  def find_users_to_update
+
+  end
+
 
 
 
