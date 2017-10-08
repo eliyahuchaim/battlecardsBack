@@ -1,5 +1,5 @@
 class Api::V1::UsersController < ApplicationController
-  skip_before_action :authorized, only: [:index, :show, :create, :users_characters, :bf1_usernames, :front_end_data, :top_ten_users]
+  skip_before_action :authorized, only: [:index, :show, :create, :users_characters, :bf1_usernames, :front_end_data, :top_ten_users, :update]
 
 
   def index
@@ -39,9 +39,11 @@ class Api::V1::UsersController < ApplicationController
 
 
   def update
-    @id = parmas[:id]
-    if
-      @user = User.update_user(@id)
+    @id = params[:id]
+    @user = User.update_user(@id)
+    if @user
+      @user = User.find(@id)
+      # byebug
       render json: {user: @user, weapons: @user.weapon_cards, vehicles: @user.vehicle_cards, classes: @user.class_cards}
     else
       render json: {status: "account not created. Repec Wamen or account get not!:,,,,( ", code: 400, message: @user.errors.full_messages[0]}
